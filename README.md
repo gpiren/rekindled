@@ -1,6 +1,6 @@
 # Rekindled
 
-Rekindled transforms your Kindle highlights into beautifully formatted Memory Reports — genre-aware, AI-generated summaries of your personal highlights from each book.
+Rekindled transforms your e-reader highlights into beautifully formatted Memory Reports — genre-aware, AI-generated summaries of your personal highlights from each book.
 
 ## What it does
 
