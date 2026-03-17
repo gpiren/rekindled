@@ -25,21 +25,31 @@
       flex-direction: column;
     }
 
-    /* ── Nav ── */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 48px;
+      padding: 14px 48px;
       border-bottom: 1px solid var(--lgray);
     }
 
     .nav-logo {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: var(--gray);
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 48px;
+      width: auto;
+    }
+
+    .nav-logo span {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--black);
     }
 
     .nav-tag {
@@ -50,7 +60,12 @@
       text-transform: uppercase;
     }
 
-    /* ── Main ── */
+    .page-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+    }
+
     .main {
       flex: 1;
       padding: 64px 48px 48px;
@@ -81,10 +96,7 @@
       line-height: 1.6;
     }
 
-    /* ── Form ── */
-    .form-section {
-      margin-bottom: 36px;
-    }
+    .form-section { margin-bottom: 36px; }
 
     .form-label {
       font-size: 11px;
@@ -96,16 +108,13 @@
       display: block;
     }
 
-    /* ── Book list ── */
     .book-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
 
-    .book-item input[type="radio"] {
-      display: none;
-    }
+    .book-item input[type="radio"] { display: none; }
 
     .book-item label {
       display: flex;
@@ -147,16 +156,13 @@
       transition: background 0.15s, border-color 0.15s;
     }
 
-    /* ── Language select ── */
     .lang-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
 
-    .lang-item input[type="radio"] {
-      display: none;
-    }
+    .lang-item input[type="radio"] { display: none; }
 
     .lang-item label {
       display: inline-block;
@@ -181,14 +187,12 @@
       color: white;
     }
 
-    /* ── Divider ── */
     .divider {
       border: none;
       border-top: 1px solid var(--lgray);
       margin: 8px 0 36px;
     }
 
-    /* ── Button ── */
     .btn {
       display: inline-block;
       background: var(--blue);
@@ -206,7 +210,35 @@
 
     .btn:hover { opacity: 0.85; }
 
-    /* ── Loading overlay ── */
+    .sidebar {
+      flex: 1;
+      border-left: 1px solid var(--lgray);
+      padding: 64px 48px 48px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .sidebar-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sidebar-body p {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
     .overlay {
       display: none;
       position: fixed;
@@ -244,7 +276,6 @@
       color: var(--gray);
     }
 
-    /* ── Footer ── */
     footer {
       padding: 20px 48px;
       border-top: 1px solid var(--lgray);
@@ -259,54 +290,69 @@
 
   <div class="overlay" id="overlay">
     <div class="spinner"></div>
-    <p class="overlay-text">Generating your Memory Report</p>
-    <p class="overlay-sub">This usually takes 20–40 seconds</p>
+    <p class="overlay-text">Reading your highlights...</p>
+    <p class="overlay-sub">Crafting your Memory Report. This takes about 20–30 seconds.</p>
   </div>
 
   <nav>
-    <span class="nav-logo">Rekindled</span>
-    <span class="nav-tag">Memory Reports</span>
+    <a class="nav-logo" href="/">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Rekindled logo"/>
+      <span>Rekindled</span>
+    </a>
+    <span class="nav-tag">Memory Reports powered by AI</span>
   </nav>
 
-  <div class="main">
-    <p class="step-label">Step 2 of 2 — Select</p>
-    <h1>Choose a book</h1>
-    <p class="sub">Select the book you want a Memory Report for, then pick your preferred language.</p>
+  <div class="page-body">
 
-    <form method="POST" id="select-form">
+    <div class="main">
+      <p class="step-label">Step 2 of 2 — Select</p>
+      <h1>Choose a book</h1>
+      <p class="sub">Select the book you want a Memory Report for, then pick your preferred language.</p>
 
-      <div class="form-section">
-        <span class="form-label">Your library</span>
-        <div class="book-list">
-          {% for book in books %}
-          <div class="book-item">
-            <input type="radio" name="title" id="book-{{ loop.index }}" value="{{ book }}" {% if loop.first %}checked{% endif %}/>
-            <label for="book-{{ loop.index }}">
-              <span class="radio-dot"></span>
-              {{ book }}
-            </label>
+      <form method="POST" id="select-form">
+
+        <div class="form-section">
+          <span class="form-label">Your library</span>
+          <div class="book-list">
+            {% for book in books %}
+            <div class="book-item">
+              <input type="radio" name="title" id="book-{{ loop.index }}" value="{{ book }}" {% if loop.first %}checked{% endif %}/>
+              <label for="book-{{ loop.index }}">
+                <span class="radio-dot"></span>
+                {{ book }}
+              </label>
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
-      </div>
 
-      <hr class="divider"/>
+        <hr class="divider"/>
 
-      <div class="form-section">
-        <span class="form-label">Report language</span>
-        <div class="lang-grid">
-          {% for lang in languages %}
-          <div class="lang-item">
-            <input type="radio" name="language" id="lang-{{ loop.index }}" value="{{ lang }}" {% if loop.first %}checked{% endif %}/>
-            <label for="lang-{{ loop.index }}">{{ lang }}</label>
+        <div class="form-section">
+          <span class="form-label">Report language</span>
+          <div class="lang-grid">
+            {% for lang in languages %}
+            <div class="lang-item">
+              <input type="radio" name="language" id="lang-{{ loop.index }}" value="{{ lang }}" {% if loop.first %}checked{% endif %}/>
+              <label for="lang-{{ loop.index }}">{{ lang }}</label>
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
         </div>
+
+        <button type="submit" class="btn" id="submit-btn">Generate Report →</button>
+
+      </form>
+    </div>
+
+    <div class="sidebar">
+      <p class="sidebar-label">Your library is waiting.</p>
+      <div class="sidebar-body">
+        <p>These are the books you cared enough to mark. Pick one and let Rekindled bring back everything you once found worth remembering.</p>
+        <p>And if you would like to read your report in a different language, go ahead. Reading in your preferred language can make the ideas feel more personal.</p>
       </div>
+    </div>
 
-      <button type="submit" class="btn" id="submit-btn">Generate Report →</button>
-
-    </form>
   </div>
 
   <footer>Rekindled &nbsp;·&nbsp; Powered by Claude</footer>

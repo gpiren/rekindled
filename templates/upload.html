@@ -29,16 +29,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 48px;
+      padding: 14px 48px;
       border-bottom: 1px solid var(--lgray);
     }
 
     .nav-logo {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: var(--gray);
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 48px;
+      width: auto;
+    }
+
+    .nav-logo span {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--black);
     }
 
     .nav-tag {
@@ -49,6 +60,12 @@
       text-transform: uppercase;
     }
 
+    .page-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+    }
+
     .hero {
       flex: 1;
       display: flex;
@@ -56,7 +73,7 @@
       justify-content: center;
       align-items: flex-start;
       padding: 80px 48px 48px;
-      max-width: 720px;
+      max-width: 600px;
     }
 
     .hero-label {
@@ -99,9 +116,7 @@
       font-weight: 500;
     }
 
-    #file-input {
-      display: none;
-    }
+    #file-input { display: none; }
 
     .drop-zone {
       border: 1.5px dashed var(--lgray);
@@ -113,25 +128,14 @@
       cursor: pointer;
     }
 
-    .drop-zone:hover {
-      border-color: var(--blue);
-      background: #f5f5ff;
-    }
-
-    .drop-zone.dragover {
-      border-color: var(--blue);
-      background: #f5f5ff;
-    }
-
+    .drop-zone:hover,
+    .drop-zone.dragover,
     .drop-zone.has-file {
       border-color: var(--blue);
       background: #f5f5ff;
     }
 
-    .drop-icon {
-      font-size: 28px;
-      margin-bottom: 12px;
-    }
+    .drop-icon { font-size: 28px; margin-bottom: 12px; }
 
     .drop-label {
       font-size: 13px;
@@ -155,10 +159,7 @@
       transition: background 0.2s, color 0.2s;
     }
 
-    .browse-btn:hover {
-      background: var(--blue);
-      color: white;
-    }
+    .browse-btn:hover { background: var(--blue); color: white; }
 
     .file-name {
       font-size: 12px;
@@ -187,6 +188,35 @@
 
     .btn-submit:hover { opacity: 0.85; }
 
+    .sidebar {
+      flex: 1;
+      border-left: 1px solid var(--lgray);
+      padding: 80px 48px 48px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .sidebar-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .sidebar-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sidebar-item p {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+
     footer {
       padding: 20px 48px;
       border-top: 1px solid var(--lgray);
@@ -200,32 +230,66 @@
 <body>
 
   <nav>
-    <span class="nav-logo">Rekindled</span>
-    <span class="nav-tag">Memory Reports</span>
+    <a class="nav-logo" href="/">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Rekindled logo"/>
+      <span>Rekindled</span>
+    </a>
+    <span class="nav-tag">Memory Reports powered by AI</span>
   </nav>
 
-  <div class="hero">
-    <p class="hero-label">Step 1 of 2 — Upload</p>
-    <h1>Your highlights,<br><span>remembered.</span></h1>
-    <p class="hero-sub">Upload your Kindle clippings file to generate a beautifully formatted Memory Report for any book in your library.</p>
+  <div class="page-body">
 
-    <div class="upload-area">
-      {% if error %}
-        <p class="error">{{ error }}</p>
-      {% endif %}
+    <div class="hero">
+      <p class="hero-label">Step 1 of 2 — Upload</p>
+      <h1>Your highlights,<br><span>remembered.</span></h1>
+      <p class="hero-sub">Upload your Kindle clippings file to generate a beautifully formatted Memory Report for any book in your library.</p>
 
-      <div class="drop-zone" id="drop-zone">
-        <div class="drop-icon">📎</div>
-        <p class="drop-label">Drop your My Clippings.txt here</p>
-        <label for="file-input" class="browse-btn">Browse file</label>
-        <p class="file-name" id="file-name"></p>
+      <div class="upload-area">
+        {% if error %}
+          <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <div class="drop-zone" id="drop-zone">
+          <div class="drop-icon">📎</div>
+          <p class="drop-label">Drop your My Clippings.txt here</p>
+          <label for="file-input" class="browse-btn">Browse file</label>
+          <p class="file-name" id="file-name"></p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" id="upload-form">
+          <input type="file" name="clippings" accept=".txt" id="file-input"/>
+          <button type="submit" class="btn-submit">Continue →</button>
+        </form>
       </div>
-
-      <form method="POST" enctype="multipart/form-data" id="upload-form">
-        <input type="file" name="clippings" accept=".txt" id="file-input"/>
-        <button type="submit" class="btn-submit" id="submit-btn">Continue →</button>
-      </form>
     </div>
+
+    <div class="sidebar">
+      <p class="sidebar-label">What is Rekindled?</p>
+      <div class="sidebar-items">
+
+        <div class="sidebar-item">
+          <p>Modern life is loud. Between the noise and the notifications, we forget the books that once moved us. The ideas that stayed with us for days, the sentences we wanted to remember forever.</p>
+        </div>
+
+        <div class="sidebar-item">
+          <p>But somewhere in your e-reader, those highlights are still there. The quotes that made you pause. The insights that changed how you think. Waiting to be found again.</p>
+        </div>
+
+        <div class="sidebar-item">
+          <p>Rekindled was built by people who care enough to highlight and who deserve more than a list of forgotten passages.</p>
+        </div>
+
+        <div class="sidebar-item">
+          <p>For non-fiction, we craft genre-aware, context-sensitive Memory Reports that distill the ideas you marked into something worth reading again.</p>
+        </div>
+
+        <div class="sidebar-item">
+          <p>For fiction, we let the words speak. Your highlighted passages, returned to you exactly as you found them, because some sentences need no explanation.</p>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <footer>Rekindled &nbsp;·&nbsp; Powered by Claude</footer>
@@ -235,12 +299,10 @@
     const fileLabel  = document.getElementById('file-name');
     const dropZone   = document.getElementById('drop-zone');
     const uploadForm = document.getElementById('upload-form');
-    let   selectedFile = null;
+    let selectedFile = null;
 
-    // Click on drop zone triggers file picker
     dropZone.addEventListener('click', () => fileInput.click());
 
-    // File picked via browser
     fileInput.addEventListener('change', () => {
       if (fileInput.files[0]) {
         selectedFile = fileInput.files[0];
@@ -249,21 +311,18 @@
       }
     });
 
-    // Drag over
     dropZone.addEventListener('dragover', e => {
       e.preventDefault();
       e.stopPropagation();
       dropZone.classList.add('dragover');
     });
 
-    // Drag leave
     dropZone.addEventListener('dragleave', e => {
       e.preventDefault();
       e.stopPropagation();
       dropZone.classList.remove('dragover');
     });
 
-    // Drop
     dropZone.addEventListener('drop', e => {
       e.preventDefault();
       e.stopPropagation();
@@ -276,7 +335,6 @@
       }
     });
 
-    // Submit — use fetch so dragged file is always included
     uploadForm.addEventListener('submit', e => {
       e.preventDefault();
       if (!selectedFile) {

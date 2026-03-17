@@ -29,16 +29,27 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 48px;
+      padding: 14px 48px;
       border-bottom: 1px solid var(--lgray);
     }
 
     .nav-logo {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: var(--gray);
-      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 64px;
+      width: auto;
+    }
+
+    .nav-logo span {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--black);
     }
 
     .nav-tag {
@@ -158,7 +169,10 @@
 <body>
 
   <nav>
-    <span class="nav-logo">Rekindled</span>
+    <a class="nav-logo" href="/">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Rekindled logo"/>
+      <span>Rekindled</span>
+    </a>
     <span class="nav-tag">Memory Reports</span>
   </nav>
 
