@@ -99,22 +99,31 @@
       font-weight: 500;
     }
 
-    /* Hidden real input */
     #file-input {
       display: none;
     }
 
-    /* Styled file picker box */
-    .file-picker {
+    .drop-zone {
       border: 1.5px dashed var(--lgray);
       border-radius: 4px;
       padding: 40px 32px;
       text-align: center;
       margin-bottom: 16px;
       transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
     }
 
-    .file-picker.has-file {
+    .drop-zone:hover {
+      border-color: var(--blue);
+      background: #f5f5ff;
+    }
+
+    .drop-zone.dragover {
+      border-color: var(--blue);
+      background: #f5f5ff;
+    }
+
+    .drop-zone.has-file {
       border-color: var(--blue);
       background: #f5f5ff;
     }
@@ -205,17 +214,16 @@
         <p class="error">{{ error }}</p>
       {% endif %}
 
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-icon">📎</div>
+        <p class="drop-label">Drop your My Clippings.txt here</p>
+        <label for="file-input" class="browse-btn">Browse file</label>
+        <p class="file-name" id="file-name"></p>
+      </div>
+
       <form method="POST" enctype="multipart/form-data" id="upload-form">
         <input type="file" name="clippings" accept=".txt" id="file-input"/>
-
-        <div class="file-picker" id="file-picker">
-          <div class="drop-icon">📎</div>
-          <p class="drop-label">Select your My Clippings.txt file</p>
-          <label for="file-input" class="browse-btn">Browse file</label>
-          <p class="file-name" id="file-name"></p>
-        </div>
-
-        <button type="submit" class="btn-submit">Continue →</button>
+        <button type="submit" class="btn-submit" id="submit-btn">Continue →</button>
       </form>
     </div>
   </div>
@@ -223,18 +231,75 @@
   <footer>Rekindled &nbsp;·&nbsp; Powered by Claude</footer>
 
   <script>
-    const input   = document.getElementById('file-input');
-    const label   = document.getElementById('file-name');
-    const picker  = document.getElementById('file-picker');
+    const fileInput  = document.getElementById('file-input');
+    const fileLabel  = document.getElementById('file-name');
+    const dropZone   = document.getElementById('drop-zone');
+    const uploadForm = document.getElementById('upload-form');
+    let   selectedFile = null;
 
-    input.addEventListener('change', () => {
-      if (input.files[0]) {
-        label.textContent = input.files[0].name;
-        picker.classList.add('has-file');
+    // Click on drop zone triggers file picker
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // File picked via browser
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) {
+        selectedFile = fileInput.files[0];
+        fileLabel.textContent = selectedFile.name;
+        dropZone.classList.add('has-file');
       }
+    });
+
+    // Drag over
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.add('dragover');
+    });
+
+    // Drag leave
+    dropZone.addEventListener('dragleave', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove('dragover');
+    });
+
+    // Drop
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      dropZone.classList.remove('dragover');
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        selectedFile = file;
+        fileLabel.textContent = file.name;
+        dropZone.classList.add('has-file');
+      }
+    });
+
+    // Submit — use fetch so dragged file is always included
+    uploadForm.addEventListener('submit', e => {
+      e.preventDefault();
+      if (!selectedFile) {
+        fileLabel.textContent = 'Please select a file first.';
+        fileLabel.style.color = '#cc0000';
+        return;
+      }
+      const fd = new FormData();
+      fd.append('clippings', selectedFile);
+      fetch('/', { method: 'POST', body: fd })
+        .then(res => {
+          if (res.redirected) {
+            window.location.href = res.url;
+          } else {
+            res.text().then(html => {
+              document.open();
+              document.write(html);
+              document.close();
+            });
+          }
+        });
     });
   </script>
 
 </body>
 </html>
-
