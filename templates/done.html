@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rekindled — Done</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:  #1500FF;
+      --black: #111111;
+      --gray:  #888888;
+      --lgray: #DDDDDD;
+      --bg:    #FFFFFF;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 48px;
+      border-bottom: 1px solid var(--lgray);
+    }
+
+    .nav-logo {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--gray);
+      text-transform: uppercase;
+    }
+
+    .nav-tag {
+      font-size: 11px;
+      color: var(--blue);
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 48px 48px;
+      max-width: 640px;
+    }
+
+    .success-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--blue);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .success-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .book-title {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 48px;
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    .book-title strong {
+      color: var(--black);
+      font-weight: 600;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .btn-primary {
+      display: block;
+      background: var(--blue);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      display: block;
+      background: white;
+      color: var(--black);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 16px 32px;
+      border: 1.5px solid var(--lgray);
+      border-radius: 3px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--black); }
+
+    footer {
+      padding: 20px 48px;
+      border-top: 1px solid var(--lgray);
+      font-size: 11px;
+      color: var(--lgray);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="nav-logo">Rekindled</span>
+    <span class="nav-tag">Memory Reports</span>
+  </nav>
+
+  <div class="main">
+    <div class="success-tag">
+      <span class="success-dot"></span>
+      Report ready
+    </div>
+
+    <h1>Your report<br>is ready.</h1>
+
+    <p class="book-title">
+      Memory Report generated for <strong>{{ title }}</strong>.<br>
+      Download the PDF below.
+    </p>
+
+    <div class="actions">
+      <a href="/download" class="btn-primary">Download PDF →</a>
+      <a href="/select" class="btn-secondary">Generate another report</a>
+    </div>
+  </div>
+
+  <footer>Rekindled &nbsp;·&nbsp; Powered by Claude</footer>
+
+</body>
+</html>
